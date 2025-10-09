@@ -4,6 +4,7 @@ import requests
 import os
 TOKEN = "7720062392:AAE3ciawKeDce8ruQGbOyjlg16pkNlkUiKQ"
 CHAT_ID = "6884123314"
+ALPHA_API_KEY = "1OBJS4GR777951LD"
 
 print("TOKEN:", TOKEN)
 print("CHAT_ID:", CHAT_ID)
@@ -24,21 +25,21 @@ def get_gold_price():
     return round(price_per_gram_in_inr*1.10, 2)
 
 import requests
-from bs4 import BeautifulSoup
-
-import requests
 import os
 
 def get_nifty_price():
-    api_key = "1OBJS4GR777951LD"
+    api_key = ALPHA_API_KEY
     url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=NSEI&apikey={api_key}"
     response = requests.get(url)
     data = response.json()
+    print("Alpha Vantage response:", data)  # Debug print to check the actual returned data
+
     try:
         price = float(data["Global Quote"]["05. price"])
         return price
     except KeyError:
-        raise ValueError("Error fetching Nifty price from Alpha Vantage API")
+        raise ValueError(f"Error fetching Nifty price from Alpha Vantage API. Response: {data}")
+
 
 def send_message(text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
