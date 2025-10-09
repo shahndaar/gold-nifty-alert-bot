@@ -29,12 +29,15 @@ def get_nifty_price():
     import requests
 
     api_key = "08deface8d4849c5b70d7a173a86387d"
-    symbol = "NSE"  # Try "NSEI" or "NSE/NIFTY 50" if this fails
+    symbol = "NSEI"  # Your symbol
     url = f"https://api.twelvedata.com/price?symbol={symbol}&apikey={api_key}"
     response = requests.get(url)
     data = response.json()
+    
     if "price" in data:
-        return float(data["price"])
+        raw_price = float(data["price"])
+        scale_factor = 57500  # Adjust as needed after checking live data
+        return raw_price * scale_factor
     else:
         raise ValueError(f"Error fetching Nifty price: {data}")
 
