@@ -28,25 +28,27 @@ from bs4 import BeautifulSoup
 
 def get_nifty_price():
     import requests
-    from bs4 import BeautifulSoup
 
-    url = "https://www.moneycontrol.com/indian-indices/nifty-50-9.html"
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, "html.parser")
+    url = "https://www.nseindia.com/api/equity-stockIndices?index=NIFTY"
 
-    # Attempt to find price with common classes
-    price_tag = soup.find("div", class_="inprice1 nsecp")
-    if not price_tag:
-        price_tag = soup.find("span", class_="pcsp")
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Referer": "https://www.nseindia.com/"
+    }
 
-    if not price_tag:
-        # Print snippet for debugging if not found, then raise error
-        print("Could not find Nifty price element on page")
-        print(soup.prettify()[:500])  # print first 500 chars of page
-        raise ValueError("Nifty price element not found")
+    session = requests.Session()
+    session.get("https://www.nseindia.com", headers=headers)  # initial request to set cookies
+    response = session.get(url, headers=headers)
+    data = response.json()
 
-    price_text = price_tag.text.strip().replace(",", "")
-    return float(price_text)
+    # Extract lastPrice for Nifty index
+    for item in data['data']:
+        if item['index'] == 'NIFTY 50':
+            return float(item['lastPrice'])
+
+    raise ValueError("Nifty price not found in NSE data")
 
 def send_message(text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
