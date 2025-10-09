@@ -28,18 +28,19 @@ import requests
 import os
 
 def get_nifty_price():
-    api_key = ALPHA_API_KEY
-    url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=NSEI&apikey={api_key}"
+    api_key = "1OBJS4GR777951LD"
+    url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=NSEI&apikey={api_key}"
     response = requests.get(url)
     data = response.json()
-    print("Alpha Vantage response:", data)  # Debug print to check the actual returned data
+    print("Alpha Vantage response keys:", data.keys())  # Debug print
 
     try:
-        price = float(data["Global Quote"]["05. price"])
-        return price
+        time_series = data["Time Series (Daily)"]
+        latest_date = max(time_series.keys())
+        latest_close = float(time_series[latest_date]["4. close"])
+        return latest_close
     except KeyError:
         raise ValueError(f"Error fetching Nifty price from Alpha Vantage API. Response: {data}")
-
 
 def send_message(text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
