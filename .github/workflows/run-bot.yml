@@ -2,8 +2,9 @@ name: Run Gold-Nifty Bot
 
 on:
   schedule:
-    - cron: '30 0,8,16 * * *'
-  workflow_dispatch:  # Add this line to enable manual runs
+    # Runs at 6 AM, 2 PM, and 10 PM IST (0:30, 8:30, and 16:30 UTC)
+    - cron:  '30 0,8,16 * * *'
+  workflow_dispatch:
 
 jobs:
   run-bot:
@@ -13,16 +14,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Install dependencies
-      run: pip install requests beautifulsoup4
-
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.x'
 
-    - name: Install requests
-      run: pip install requests
+    - name: Install dependencies
+      run: |
+        pip install requests beautifulsoup4
 
     - name: Run bot script
       run: python bot.py
