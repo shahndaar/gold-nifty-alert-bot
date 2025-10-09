@@ -31,15 +31,20 @@ def send_chart_image(image_buffer):
     return response.json()
 
 def get_gold_price():
-    # Fetch current gold price from MarketStack commodities (gold)
-    url = f"https://api.marketstack.com/v2/commodities?access_key={MARKETSTACK_KEY}&commodity_name=gold"
-    resp = requests.get(url)
-    data = resp.json()
-    if "data" in data and len(data["data"]) > 0:
-        price = float(data["data"][0]["commodity_price"])
-        return price
-    else:
-        raise ValueError(f"Error fetching gold price: {data}")
+    import requests
+
+    url = "https://www.goldapi.io/api/XAU/INR"
+    headers = {
+        "x-access-token": "YOUR_GOLDAPI_KEY"
+    }
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    # price is per troy ounce, convert to per gram
+    price_per_ounce = data.get("price")
+    if price_per_ounce is None:
+        raise ValueError(f"Error fetching gold price from GoldAPI: {data}")
+    price_per_gram = price_per_ounce / 31.1035
+    return price_per_gram
 
 def get_nifty_price():
     url = f"https://api.marketstack.com/v2/eod/latest?access_key={MARKETSTACK_KEY}&symbols=^NSEI"
