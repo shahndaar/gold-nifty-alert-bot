@@ -30,7 +30,7 @@ def get_nifty_price():
 
     api_key = "3010bdc7607fff414231a83b49f8f26b"
     symbol = "^NSEI"  # Your symbol
-    url = f"https://api.marketstack.com/v2/eod/latest?access_key={}&symbols=^NSEI".format(api_key)"
+    url = "https://api.marketstack.com/v2/eod/latest?access_key={}&symbols=^NSEI".format(api_key)
     # Debug print to verify data
     print("MarketStack response data:", data)
     
