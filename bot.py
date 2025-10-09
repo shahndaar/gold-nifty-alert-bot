@@ -2,8 +2,8 @@ import requests
 
 # Your Telegram bot token and chat ID
 import os
-TOKEN = os.getenv("TELEGRAM_TOKEN")
-CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+TOKEN = 7720062392:AAE3ciawKeDce8ruQGbOyjlg16pkNlkUiKQ
+CHAT_ID = 6884123314
 
 print("TOKEN:", TOKEN)
 print("CHAT_ID:", CHAT_ID)
