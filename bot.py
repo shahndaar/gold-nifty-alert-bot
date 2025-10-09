@@ -26,29 +26,19 @@ def get_gold_price():
 import requests
 from bs4 import BeautifulSoup
 
+import requests
+import os
+
 def get_nifty_price():
-    import requests
-
-    url = "https://www.nseindia.com/api/equity-stockIndices?index=NIFTY"
-
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Referer": "https://www.nseindia.com/"
-    }
-
-    session = requests.Session()
-    session.get("https://www.nseindia.com", headers=headers)  # initial request to set cookies
-    response = session.get(url, headers=headers)
+    api_key = "1OBJS4GR777951LD"
+    url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=NSEI&apikey={api_key}"
+    response = requests.get(url)
     data = response.json()
-
-    # Extract lastPrice for Nifty index
-    for item in data['data']:
-        if item['index'] == 'NIFTY 50':
-            return float(item['lastPrice'])
-
-    raise ValueError("Nifty price not found in NSE data")
+    try:
+        price = float(data["Global Quote"]["05. price"])
+        return price
+    except KeyError:
+        raise ValueError("Error fetching Nifty price from Alpha Vantage API")
 
 def send_message(text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
