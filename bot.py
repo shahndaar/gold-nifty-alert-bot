@@ -5,6 +5,9 @@ import os
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
+print("TOKEN:", TOKEN)
+print("CHAT_ID:", CHAT_ID)
+
 def get_gold_price():
     # Using free API or workaround to get gold price in INR per gram
     # For demonstration, we'll use a placeholder price, replace with your API later
