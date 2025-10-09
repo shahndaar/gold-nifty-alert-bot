@@ -1,32 +1,41 @@
-import os
 import requests
 
-# Fetch sensitive info from environment variables (GitHub Secrets)
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
-MARKETSTACK_API_KEY = os.getenv("MARKETSTACK_API_KEY")
-GOLD_API_KEY = os.getenv("GOLD_API_KEY")
+# Your Telegram bot token and chat ID
+import os
+TOKEN = "7720062392:AAE3ciawKeDce8ruQGbOyjlg16pkNlkUiKQ"
+CHAT_ID = "6884123314"
+MARKETSTACK_API_KEY = "3010bdc7607fff414231a83b49f8f26b"
+GOLD_API_KEY = "goldapi-4eg3smgj877cw-io"
+
+print("TOKEN:", TOKEN)
+print("CHAT_ID:", CHAT_ID)
 
 def get_gold_price():
+    import os
+    api_key = "goldapi-4eg3smgj877cw-io"
     url = "https://www.goldapi.io/api/XAU/INR"
     headers = {
-        "x-access-token": "goldapi-4eg3smgj877cw-io",  # hardcoded for test
+        "x-access-token": api_key,
         "Content-Type": "application/json"
     }
     response = requests.get(url, headers=headers)
     data = response.json()
-    if "price" not in data:
-        raise ValueError(f"Error fetching gold price from GoldAPI.io: {data}")
+    # goldapi gives price per troy ounce in INR
     price_per_ounce_in_inr = data["price"]
     price_per_gram_in_inr = price_per_ounce_in_inr / 31.1035  # Troy ounce to gram
-    return round(price_per_gram_in_inr * 1.10, 2)
+    return round(price_per_gram_in_inr*1.10, 2)
 
 def get_nifty_price():
-    url = f"https://api.marketstack.com/v2/eod/latest?access_key={MARKETSTACK_API_KEY}&symbols=^NSEI"
+    import os
+    import requests
+
+    api_key = "3010bdc7607fff414231a83b49f8f26b"
+    url = f"https://api.marketstack.com/v2/eod/latest?access_key={api_key}&symbols=^NSEI"
     try:
         response = requests.get(url)
-        response.raise_for_status()
+        response.raise_for_status()  # Raises HTTPError for bad responses
         data = response.json()
+        print("MarketStack response data:", data)
     except Exception as e:
         raise ValueError(f"Error fetching data from MarketStack API: {e}")
 
@@ -55,6 +64,7 @@ def main():
         f"🔢 Gold/Nifty Ratio: {ratio:.4f}\n"
     )
 
+    # Updated alerts based on ratio
     if ratio >= 0.600:
         message += "⚠️ Sell Equities and Buy Gold\n"
     elif ratio <= 0.280:
