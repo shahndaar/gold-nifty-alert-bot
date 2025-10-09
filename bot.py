@@ -24,23 +24,18 @@ def get_gold_price():
     price_per_gram_in_inr = price_per_ounce_in_inr / 31.1035  # Troy ounce to gram
     return round(price_per_gram_in_inr*1.10, 2)
 
-import requests
-import os
-
 def get_nifty_price():
-    api_key = "1OBJS4GR777951LD"
-    url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=NSEI&apikey={api_key}"
+    import os
+    import requests
+
+    api_key = "08deface8d4849c5b70d7a173a86387d"
+    url = f"https://api.twelvedata.com/price?symbol=NSE_NIFTY_50&apikey={api_key}"
     response = requests.get(url)
     data = response.json()
-    print("Alpha Vantage response keys:", data.keys())  # Debug print
-
-    try:
-        time_series = data["Time Series (Daily)"]
-        latest_date = max(time_series.keys())
-        latest_close = float(time_series[latest_date]["4. close"])
-        return latest_close
-    except KeyError:
-        raise ValueError(f"Error fetching Nifty price from Alpha Vantage API. Response: {data}")
+    if "price" in data:
+        return float(data["price"])
+    else:
+        raise ValueError(f"Error fetching Nifty price: {data}")
 
 def send_message(text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
