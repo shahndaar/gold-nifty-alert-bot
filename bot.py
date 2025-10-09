@@ -10,18 +10,16 @@ GOLD_API_KEY = os.getenv("GOLD_API_KEY")
 def get_gold_price():
     url = "https://www.goldapi.io/api/XAU/INR"
     headers = {
-        "x-access-token": GOLD_API_KEY,
+        "x-access-token": "goldapi-4eg3smgj877cw-io",  # hardcoded for test
         "Content-Type": "application/json"
     }
     response = requests.get(url, headers=headers)
     data = response.json()
-    print("GoldAPI response:", data)  # Debug print entire response
     if "price" not in data:
         raise ValueError(f"Error fetching gold price from GoldAPI.io: {data}")
     price_per_ounce_in_inr = data["price"]
     price_per_gram_in_inr = price_per_ounce_in_inr / 31.1035  # Troy ounce to gram
     return round(price_per_gram_in_inr * 1.10, 2)
-
 
 def get_nifty_price():
     url = f"https://api.marketstack.com/v2/eod/latest?access_key={MARKETSTACK_API_KEY}&symbols=^NSEI"
