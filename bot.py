@@ -9,18 +9,19 @@ print("TOKEN:", TOKEN)
 print("CHAT_ID:", CHAT_ID)
 
 def get_gold_price():
-    url = "https://metals-api.com/api/latest?access_key=YOUR_API_KEY&base=INR&symbols=XAU"
-    response = requests.get(url)
-    print("Metals-API status:", response.status_code)
-    print("Metals-API response:", response.text)
-    try:
-        data = response.json()
-        rate_per_ounce_in_inr = data["rates"]["XAU"]
-        rate_per_gram_in_inr = rate_per_ounce_in_inr / 31.1035
-        return round(rate_per_gram_in_inr, 2)
-    except Exception as e:
-        print("Error in Metals-API:", e)
-        return 6000  # Fallback value if API fails
+    import os
+    api_key = "goldapi-4eg3smgj877cw-io"
+    url = "https://www.goldapi.io/api/XAU/INR"
+    headers = {
+        "x-access-token": api_key,
+        "Content-Type": "application/json"
+    }
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    # goldapi gives price per troy ounce in INR
+    price_per_ounce_in_inr = data["price"]
+    price_per_gram_in_inr = price_per_ounce_in_inr / 31.1035  # Troy ounce to gram
+    return round(price_per_gram_in_inr, 2)
 
 def get_nifty_price():
     url = "https://query1.finance.yahoo.com/v7/finance/quote?symbols=^NSEI"
