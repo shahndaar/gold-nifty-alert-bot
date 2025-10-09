@@ -29,7 +29,7 @@ def get_nifty_price():
     import requests
 
     api_key = "08deface8d4849c5b70d7a173a86387d"
-    symbol = "NSEI"  # Your symbol
+    symbol = "NSE"  # Your symbol
     url = f"https://api.twelvedata.com/price?symbol={symbol}&apikey={api_key}"
     response = requests.get(url)
     data = response.json()
