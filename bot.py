@@ -4,7 +4,7 @@ import requests
 import os
 TOKEN = "7720062392:AAE3ciawKeDce8ruQGbOyjlg16pkNlkUiKQ"
 CHAT_ID = "6884123314"
-ALPHA_API_KEY = "1OBJS4GR777951LD"
+ALPHA_API_KEY = "08deface8d4849c5b70d7a173a86387d"
 
 print("TOKEN:", TOKEN)
 print("CHAT_ID:", CHAT_ID)
@@ -28,7 +28,7 @@ def get_nifty_price():
     import os
     import requests
 
-    api_key = os.getenv("TWELVEDATA_KEY")
+    api_key = "08deface8d4849c5b70d7a173a86387d"
     url = f"https://api.twelvedata.com/price?symbol=^NSEI&apikey={api_key}"
     response = requests.get(url)
     data = response.json()
