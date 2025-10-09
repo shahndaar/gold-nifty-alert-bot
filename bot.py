@@ -27,14 +27,26 @@ import requests
 from bs4 import BeautifulSoup
 
 def get_nifty_price():
+    import requests
+    from bs4 import BeautifulSoup
+
     url = "https://www.moneycontrol.com/indian-indices/nifty-50-9.html"
     response = requests.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
-    # Inspect the page to verify the correct tag and class for Nifty price
-    price_tag = soup.find("div", {"class": "inprice1 nsecp"})
+
+    # Attempt to find price with common classes
+    price_tag = soup.find("div", class_="inprice1 nsecp")
+    if not price_tag:
+        price_tag = soup.find("span", class_="pcsp")
+
+    if not price_tag:
+        # Print snippet for debugging if not found, then raise error
+        print("Could not find Nifty price element on page")
+        print(soup.prettify()[:500])  # print first 500 chars of page
+        raise ValueError("Nifty price element not found")
+
     price_text = price_tag.text.strip().replace(",", "")
     return float(price_text)
-
 
 def send_message(text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
