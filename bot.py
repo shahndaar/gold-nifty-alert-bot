@@ -15,12 +15,24 @@ def get_gold_price():
     return gold_price_inr_per_gram
 
 def get_nifty_price():
-    # Using Yahoo Finance unofficial API for Nifty example
     url = "https://query1.finance.yahoo.com/v7/finance/quote?symbols=^NSEI"
     response = requests.get(url)
-    data = response.json()
-    nifty_price = data['quoteResponse']['result'][0]['regularMarketPrice']
-    return nifty_price
+    print("Nifty response status code:", response.status_code)
+    print("Nifty response text:", response.text)
+    try:
+        data = response.json()
+        if (
+            "quoteResponse" in data
+            and "result" in data["quoteResponse"]
+            and len(data["quoteResponse"]["result"]) > 0
+        ):
+            return data["quoteResponse"]["result"][0]["regularMarketPrice"]
+        else:
+            print("Yahoo Finance API missing data, fallback value used")
+            return 20000  # Fallback, replace with real value if you want
+    except Exception as e:
+        print("Yahoo Finance API error:", str(e))
+        return 20000  # Fallback value
 
 def send_message(text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
