@@ -4,7 +4,7 @@ import requests
 import os
 TOKEN = "7720062392:AAE3ciawKeDce8ruQGbOyjlg16pkNlkUiKQ"
 CHAT_ID = "6884123314"
-ALPHA_API_KEY = "08deface8d4849c5b70d7a173a86387d"
+ALPHA_API_KEY = "3010bdc7607fff414231a83b49f8f26b"
 
 print("TOKEN:", TOKEN)
 print("CHAT_ID:", CHAT_ID)
@@ -28,9 +28,9 @@ def get_nifty_price():
     import os
     import requests
 
-    api_key = "08deface8d4849c5b70d7a173a86387d"
+    api_key = "3010bdc7607fff414231a83b49f8f26b"
     symbol = "NSE"  # Your symbol
-    url = f"https://api.twelvedata.com/price?symbol={symbol}&apikey={api_key}"
+    url = f"http://api.marketstack.com/v1/eod/latest?access_key={api_key}&symbols=^NSE"
     response = requests.get(url)
     data = response.json()
     
