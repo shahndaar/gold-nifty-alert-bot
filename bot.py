@@ -9,10 +9,15 @@ print("TOKEN:", TOKEN)
 print("CHAT_ID:", CHAT_ID)
 
 def get_gold_price():
-    # Using free API or workaround to get gold price in INR per gram
-    # For demonstration, we'll use a placeholder price, replace with your API later
-    gold_price_inr_per_gram = 6000  # Replace with real API call
-    return gold_price_inr_per_gram
+    # Example with Metals-API (requires free API key signup)
+    url = "https://metals-api.com/api/latest?access_key=YOUR_API_KEY&base=INR&symbols=XAU"
+    response = requests.get(url)
+    data = response.json()
+    # XAU price per troy ounce in INR
+    rate_per_ounce_in_inr = data["rates"]["XAU"]
+    # Convert per ounce to per gram (1 troy ounce = 31.1035 grams)
+    rate_per_gram_in_inr = rate_per_ounce_in_inr / 31.1035
+    return round(rate_per_gram_in_inr, 2)
 
 def get_nifty_price():
     url = "https://query1.finance.yahoo.com/v7/finance/quote?symbols=^NSEI"
