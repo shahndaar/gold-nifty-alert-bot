@@ -29,20 +29,19 @@ def get_nifty_price():
     import requests
 
     api_key = "3010bdc7607fff414231a83b49f8f26b"
-    symbol = "^NSEI"  # Your symbol
-    url = "https://api.marketstack.com/v2/eod/latest?access_key={}&symbols=^NSEI".format(api_key)
-    # Debug print to verify data
-    print("MarketStack response data:", data)
-    
-    response = requests.get(url)
-    data = response.json()
-    
-    if "price" in data:
-        raw_price = float(data["price"])
-        scale_factor = 57500  # Adjust as needed after checking live data
-        return raw_price * scale_factor
-    else:
-        raise ValueError(f"Error fetching Nifty price: {data}")
+    url = f"https://api.marketstack.com/v2/eod/latest?access_key={api_key}&symbols=^NSEI"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raises HTTPError for bad responses
+        data = response.json()
+        print("MarketStack response data:", data)
+    except Exception as e:
+        raise ValueError(f"Error fetching data from MarketStack API: {e}")
+
+    try:
+        return float(data["data"][0]["close"])
+    except (IndexError, KeyError) as e:
+        raise ValueError(f"Error parsing Nifty price from response: {data}") from e
 
 def send_message(text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
