@@ -2,8 +2,8 @@ name: Run Gold-Nifty Bot
 
 on:
   schedule:
-    # Runs at 6 AM, 2 PM, and 10 PM IST (0:30, 8:30, and 16:30 UTC)
-    - cron:  '30 0,8,16 * * *'
+    - cron: '30 0,8,16 * * *'
+  workflow_dispatch:  # Add this line to enable manual runs
 
 jobs:
   run-bot:
