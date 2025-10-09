@@ -21,27 +21,20 @@ def get_gold_price():
     # goldapi gives price per troy ounce in INR
     price_per_ounce_in_inr = data["price"]
     price_per_gram_in_inr = price_per_ounce_in_inr / 31.1035  # Troy ounce to gram
-    return round(price_per_gram_in_inr, 2)
+    return round(price_per_gram_in_inr*1.10, 2)
+
+import requests
+from bs4 import BeautifulSoup
 
 def get_nifty_price():
-    url = "https://query1.finance.yahoo.com/v7/finance/quote?symbols=^NSEI"
+    url = "https://www.moneycontrol.com/indian-indices/nifty-50-9.html"
     response = requests.get(url)
-    print("Nifty response status code:", response.status_code)
-    print("Nifty response text:", response.text)
-    try:
-        data = response.json()
-        if (
-            "quoteResponse" in data
-            and "result" in data["quoteResponse"]
-            and len(data["quoteResponse"]["result"]) > 0
-        ):
-            return data["quoteResponse"]["result"][0]["regularMarketPrice"]
-        else:
-            print("Yahoo Finance API missing data, fallback value used")
-            return 20000  # Fallback, replace with real value if you want
-    except Exception as e:
-        print("Yahoo Finance API error:", str(e))
-        return 20000  # Fallback value
+    soup = BeautifulSoup(response.text, "html.parser")
+    # Inspect the page to verify the correct tag and class for Nifty price
+    price_tag = soup.find("div", {"class": "inprice1 nsecp"})
+    price_text = price_tag.text.strip().replace(",", "")
+    return float(price_text)
+
 
 def send_message(text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
@@ -63,11 +56,13 @@ def main():
         f"🔢 Gold/Nifty Ratio: {ratio:.4f}\n"
     )
 
-    # Add alerts for your specific ratio levels here
-    if ratio > 8:  # example upper threshold
-        message += "⚠️ Ratio above 8 - consider action!\n"
-    elif ratio < 6:  # example lower threshold
-        message += "⚠️ Ratio below 6 - consider action!\n"
+    # Updated alerts based on ratio
+    if ratio >= 0.600:
+        message += "⚠️ Sell Equities and Buy Gold\n"
+    elif ratio <= 0.280:
+        message += "⚠️ Sell Gold and Buy Equities\n"
+    else:
+        message += "✅ No action needed\n"
 
     send_message(message)
 
