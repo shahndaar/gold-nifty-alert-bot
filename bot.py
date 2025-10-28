@@ -30,7 +30,7 @@ def get_nifty_price():
     import requests
 
     api_key = "3010bdc7607fff414231a83b49f8f26b"
-    url = fhttps://www.alphavantage.co/query?symbol=NSE:NIFTYBEES.NS&apikey=RSZ90VYQTLKNPPSE"
+    url = f"https://www.alphavantage.co/query?symbol=NSE:NIFTYBEES.NS&apikey=RSZ90VYQTLKNPPSE"
     # url = f"https://api.marketstack.com/v2/eod/latest?access_key={api_key}&symbols=^NSEI"
     try:
         response = requests.get(url)
