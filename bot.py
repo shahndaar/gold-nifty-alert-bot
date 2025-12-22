@@ -23,7 +23,7 @@ def get_gold_price():
     # goldapi gives price per troy ounce in INR
     price_per_ounce_in_inr = data["price"]
     price_per_gram_in_inr = price_per_ounce_in_inr / 31.1035  # Troy ounce to gram
-    return round(price_per_gram_in_inr*1.10, 2)
+    return round(price_per_gram_in_inr*1.10, 2) #need to remove this correction as it is not good for code
 
 def get_nifty_price():
     import os
