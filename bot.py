@@ -23,7 +23,7 @@ def get_gold_price():
     # goldapi gives price per troy ounce in INR
     price_per_ounce_in_inr = data["price"]
     price_per_gram_in_inr = price_per_ounce_in_inr / 31.1035  # Troy ounce to gram
-    return round(price_per_gram_in_inr*1.10, 2) #need to remove this correction as it is not good for code
+    return round(price_per_gram_in_inr*1.06, 4) #need to remove this correction as it is not good for code
 
 def get_nifty_price():
     import os
@@ -65,10 +65,10 @@ def main():
     )
 
     # Updated alerts based on ratio
-    if ratio >= 0.600:
-        message += "⚠️ Sell Equities and Buy Gold\n"
+    if ratio >= 0.630:
+        message += "⚠️ Sell Gold and Buy Nifty\n"
     elif ratio <= 0.280:
-        message += "⚠️ Sell Gold and Buy Equities\n"
+        message += "⚠️ Sell Nifty and Buy Gold\n"
     else:
         message += "✅ No action needed\n"
 
