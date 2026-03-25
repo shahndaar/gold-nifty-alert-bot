@@ -7,9 +7,6 @@ CHAT_ID = "6884123314"
 MARKETSTACK_API_KEY = "3010bdc7607fff414231a83b49f8f26b"
 GOLD_API_KEY = "goldapi-4eg3smgj877cw-io"
 
-print("TOKEN:", TOKEN)
-print("CHAT_ID:", CHAT_ID)
-
 def get_gold_price():
     import os
     api_key = "goldapi-4eg3smgj877cw-io"
